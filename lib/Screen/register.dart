@@ -124,6 +124,7 @@ class _LoginState extends State<Register> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Sukses Menambah User')));
       }
+      main();
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Error')));
