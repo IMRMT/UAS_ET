@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+String _user_name = '';
 String _user_id = '';
 String _user_password = '';
 String error_login = '';
@@ -52,13 +53,13 @@ class _LoginState extends State<Login> {
               padding: EdgeInsets.all(10),
               child: TextField(
                 onChanged: (v) {
-                  _user_id = v;
+                  _user_name = v;
                   _user_password = v;
                 },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Email',
-                    hintText: 'Enter valid email id as abc@gmail.com'),
+                    labelText: 'Username',
+                    hintText: 'Enter your username'),
               ),
             ),
             Padding(
@@ -107,13 +108,13 @@ class _LoginState extends State<Login> {
     // main();\
     final response = await http.post(
         Uri.parse("https://ubaya.me/flutter/160421056/uas/login.php"),
-        body: {'user_id': _user_id, 'user_password': _user_password});
+        body: {'user_name': _user_name, 'user_password': _user_password});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
         final prefs = await SharedPreferences.getInstance();
+        prefs.setString("user_name", _user_name);
         prefs.setString("user_id", _user_id);
-        prefs.setString("user_name", json['user_name']);
         main();
       } else {
         setState(() {

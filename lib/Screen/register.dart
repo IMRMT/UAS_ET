@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-String _user_id = '';
 String _user_password = '';
 String _user_name = '';
 String error_login = '';
@@ -55,7 +54,6 @@ class _LoginState extends State<Register> {
               padding: EdgeInsets.all(10),
               child: TextField(
                 onChanged: (v) {
-                  _user_id = v;
                   _user_password = v;
                   _user_name = v;
                 },
@@ -110,7 +108,6 @@ class _LoginState extends State<Register> {
   void submit() async {
     final response = await http
         .post(Uri.parse("https://ubaya.me/flutter/160421056/uas/register.php"), body: {
-      'user_id': _user_id,
       'user_name': _user_name,
       'user_password': _user_password,
     });
