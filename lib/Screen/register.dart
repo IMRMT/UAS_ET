@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
+String _user_email = '';
 String _user_password = '';
 String _user_name = '';
 String error_login = '';
@@ -41,7 +42,7 @@ class _LoginState extends State<Register> {
           backgroundColor: Colors.greenAccent,
         ),
         body: Container(
-          height: 300,
+          height: 400,
           margin: EdgeInsets.all(20),
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -54,8 +55,7 @@ class _LoginState extends State<Register> {
               padding: EdgeInsets.all(10),
               child: TextField(
                 onChanged: (v) {
-                  _user_password = v;
-                  _user_name = v;
+                  _user_email = v;
                 },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -67,7 +67,9 @@ class _LoginState extends State<Register> {
               padding: EdgeInsets.all(10),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
-                obscureText: true,
+                onChanged: (v) {
+                  _user_name = v;
+                },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Username',
@@ -78,6 +80,9 @@ class _LoginState extends State<Register> {
               padding: EdgeInsets.all(10),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
+                onChanged: (v) {
+                  _user_password = v;
+                },
                 obscureText: true,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -109,6 +114,7 @@ class _LoginState extends State<Register> {
     final response = await http
         .post(Uri.parse("https://ubaya.me/flutter/160421056/uas/register.php"), body: {
       'user_name': _user_name,
+      'user_email': _user_email,
       'user_password': _user_password,
     });
     if (response.statusCode == 200) {

@@ -173,6 +173,9 @@ class _MyHomePageState extends State<MyHomePage> {
   void doLogout() async {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove("user_email");
+    prefs.remove("user_id");
+    prefs.remove("user_name");
+    prefs.remove("user_password");
     main();
   }
 }

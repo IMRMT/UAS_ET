@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:et_uas/Screen/register.dart';
 import 'package:et_uas/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,9 +25,6 @@ class MyLogin extends StatelessWidget {
   }
 }
 
-
-
-
 class Login extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -43,7 +41,7 @@ class _LoginState extends State<Login> {
           backgroundColor: Colors.greenAccent,
         ),
         body: Container(
-          height: 300,
+          height: 400,
           margin: EdgeInsets.all(20),
           padding: EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -82,7 +80,7 @@ class _LoginState extends State<Login> {
                 padding: EdgeInsets.all(10),
                 child: Container(
                   height: 50,
-                  width: 300,
+                  width: 350,
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(20)),
                   child: ElevatedButton(
@@ -95,9 +93,28 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 )),
+            Padding(
+                padding: EdgeInsets.all(10),
+                child: Container(
+                  height: 50,
+                  width: 350,
+                  decoration:
+                      BoxDecoration(borderRadius: BorderRadius.circular(20)),
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Register()));
+                    },
+                    child: Text(
+                      'Register',
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                  ),
+                )),
           ]),
         ));
   }
+
   void doLogin() async {
     //later, we use web service here to check the user id and password
     // final prefs = await SharedPreferences.getInstance();
@@ -114,8 +131,7 @@ class _LoginState extends State<Login> {
         prefs.setString("user_id", json['user_id']);
         prefs.setString("user_name", json['user_name']);
         main();
-      } 
-      else {
+      } else {
         setState(() {
           error_login = "Incorrect user or password";
         });
