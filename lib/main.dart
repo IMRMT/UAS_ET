@@ -7,13 +7,13 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 String active_user = "";
-String _user_id = "";
+String _user_email = "";
 int top_score = 0;
 
 Future<String> checkUser() async {
   final prefs = await SharedPreferences.getInstance();
-  String user_id = prefs.getString("user_id") ?? '';
-  return user_id;
+  String user_email = prefs.getString("user_email") ?? '';
+  return user_email;
 }
 
 void main() {
@@ -172,7 +172,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void doLogout() async {
     final prefs = await SharedPreferences.getInstance();
-    prefs.remove("user_id");
+    prefs.remove("user_email");
     main();
   }
 }

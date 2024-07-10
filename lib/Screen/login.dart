@@ -1,13 +1,13 @@
 import 'dart:convert';
 
-import 'package:et_uas/Screen/register.dart';
 import 'package:et_uas/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-String _user_name = '';
 String _user_id = '';
+String _user_email = '';
+String _user_name = '';
 String _user_password = '';
 String error_login = '';
 
@@ -23,6 +23,9 @@ class MyLogin extends StatelessWidget {
     );
   }
 }
+
+
+
 
 class Login extends StatefulWidget {
   @override
@@ -53,19 +56,21 @@ class _LoginState extends State<Login> {
               padding: EdgeInsets.all(10),
               child: TextField(
                 onChanged: (v) {
-                  _user_name = v;
-                  _user_password = v;
+                  _user_email = v;
                 },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: 'Username',
-                    hintText: 'Enter your username'),
+                    labelText: 'Email',
+                    hintText: 'Enter valid email id as abc@gmail.com'),
               ),
             ),
             Padding(
               padding: EdgeInsets.all(10),
               //padding: EdgeInsets.symmetric(horizontal: 15),
               child: TextField(
+                onChanged: (v) {
+                  _user_password = v;
+                },
                 obscureText: true,
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
@@ -90,17 +95,9 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 )),
-            ElevatedButton(
-                // style: ButtonStyle(backgroundColor:),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Register()));
-                },
-                child: Text("Register")),
           ]),
         ));
   }
-
   void doLogin() async {
     //later, we use web service here to check the user id and password
     // final prefs = await SharedPreferences.getInstance();
@@ -108,15 +105,17 @@ class _LoginState extends State<Login> {
     // main();\
     final response = await http.post(
         Uri.parse("https://ubaya.me/flutter/160421056/uas/login.php"),
-        body: {'user_name': _user_name, 'user_password': _user_password});
+        body: {'user_email': _user_email, 'user_password': _user_password});
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
         final prefs = await SharedPreferences.getInstance();
-        prefs.setString("user_name", _user_name);
-        prefs.setString("user_id", _user_id);
+        prefs.setString("user_email", _user_email);
+        prefs.setString("user_id", json['user_id']);
+        prefs.setString("user_name", json['user_name']);
         main();
-      } else {
+      } 
+      else {
         setState(() {
           error_login = "Incorrect user or password";
         });
