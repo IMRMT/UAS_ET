@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:et_uas/Screen/register.dart';
 import 'package:et_uas/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,9 +7,10 @@ import 'package:http/http.dart' as http;
 
 String _user_id = '';
 String _user_password = '';
+String _user_name = '';
 String error_login = '';
 
-class MyLogin extends StatelessWidget {
+class MyRegister extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -18,24 +18,27 @@ class MyLogin extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Login(),
+      home: Register(),
     );
   }
 }
 
-class Login extends StatefulWidget {
+
+
+
+class Register extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return _LoginState();
   }
 }
 
-class _LoginState extends State<Login> {
+class _LoginState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Login'),
+          title: Text('Register'),
           backgroundColor: Colors.greenAccent,
         ),
         body: Container(
@@ -54,11 +57,23 @@ class _LoginState extends State<Login> {
                 onChanged: (v) {
                   _user_id = v;
                   _user_password = v;
+                  _user_name = v;
                 },
                 decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: 'Email',
                     hintText: 'Enter valid email id as abc@gmail.com'),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.all(10),
+              //padding: EdgeInsets.symmetric(horizontal: 15),
+              child: TextField(
+                obscureText: true,
+                decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Username',
+                    hintText: 'Enter Username'),
               ),
             ),
             Padding(
@@ -81,46 +96,34 @@ class _LoginState extends State<Login> {
                       BoxDecoration(borderRadius: BorderRadius.circular(20)),
                   child: ElevatedButton(
                     onPressed: () {
-                      doLogin();
+                      submit();
                     },
                     child: Text(
-                      'Login',
+                      'Register',
                       style: TextStyle(color: Colors.white, fontSize: 25),
                     ),
                   ),
                 )),
-            ElevatedButton(
-                // style: ButtonStyle(backgroundColor:),
-                onPressed: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => Register()));
-                },
-                child: Text("Register")),
           ]),
         ));
   }
-
-  void doLogin() async {
-    //later, we use web service here to check the user id and password
-    // final prefs = await SharedPreferences.getInstance();
-    // prefs.setString("user_id", _user_id);
-    // main();\
-    final response = await http.post(
-        Uri.parse("https://ubaya.me/flutter/160421056/uas/login.php"),
-        body: {'user_id': _user_id, 'user_password': _user_password});
+  void submit() async {
+    final response = await http
+        .post(Uri.parse("https://ubaya.me/flutter/160421056/uas/register.php"), body: {
+      'user_id': _user_id,
+      'user_name': _user_name,
+      'user_password': _user_password,
+    });
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
-        final prefs = await SharedPreferences.getInstance();
-        prefs.setString("user_id", _user_id);
-        prefs.setString("user_name", json['user_name']);
-        main();
-      } else {
-        setState(() {
-          error_login = "Incorrect user or password";
-        });
+        if (!mounted) return;
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('Sukses Menambah User')));
       }
     } else {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('Error')));
       throw Exception('Failed to read API');
     }
   }
