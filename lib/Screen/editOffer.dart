@@ -8,7 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-
 User? active_user;
 String _txtOwner = "";
 
@@ -35,7 +34,7 @@ Future<User?> checkUser() async {
 
 class EditOffer extends StatefulWidget {
   int animalID;
-  EditOffer({Key? key, required this.animalID}) : super(key: key);
+  EditOffer({super.key, required this.animalID});
   @override
   State<StatefulWidget> createState() {
     return _EditOfferState();
@@ -43,6 +42,7 @@ class EditOffer extends StatefulWidget {
 }
 
 class _EditOfferState extends State<EditOffer> {
+  final _formKey = GlobalKey<FormState>();
   AnimalGender selectedGender = AnimalGender.jantan;
   late Animal _anim;
 
@@ -106,6 +106,7 @@ class _EditOfferState extends State<EditOffer> {
           backgroundColor: Colors.greenAccent,
         ),
         body: Container(
+          key: _formKey,
           height: 580,
           margin: EdgeInsets.all(20),
           padding: EdgeInsets.all(20),
@@ -116,73 +117,73 @@ class _EditOfferState extends State<EditOffer> {
               boxShadow: [BoxShadow(blurRadius: 20)]),
           child: Column(children: [
             Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Name',
-                    ),
-                    onChanged: (value) {
-                      _anim.name = value;
-                    },
-                    controller: _nameCont,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'nama harus diisi';
-                      }
-                      return null;
-                    },
-                  )),
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Name',
+                  ),
+                  onChanged: (value) {
+                    _anim.name = value;
+                  },
+                  controller: _nameCont,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'nama harus diisi';
+                    }
+                    return null;
+                  },
+                )),
             Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Umur (Bulan)',
-                    ),
-                    onChanged: (value) {
-                      _anim.umur = int.tryParse(value) ?? 0;
-                    },
-                    controller: _umurCont,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'umur harus diisi';
-                      }
-                      return null;
-                    },
-                  )),
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Umur (Bulan)',
+                  ),
+                  onChanged: (value) {
+                    _anim.umur = int.parse(value);
+                  },
+                  controller: _umurCont,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'umur harus diisi';
+                    }
+                    return null;
+                  },
+                )),
             Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Image Url',
-                    ),
-                    onChanged: (value) {
-                      _anim.image_url = value;
-                    },
-                    controller: _urlCont,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Url gambar animal harus diisi';
-                      }
-                      return null;
-                    },
-                  )),
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Image Url',
+                  ),
+                  onChanged: (value) {
+                    _anim.image_url = value;
+                  },
+                  controller: _urlCont,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Url gambar animal harus diisi';
+                    }
+                    return null;
+                  },
+                )),
             Padding(
-                  padding: EdgeInsets.all(10),
-                  child: TextFormField(
-                    decoration: const InputDecoration(
-                      labelText: 'Tipe Hewan',
-                    ),
-                    onChanged: (value) {
-                      _anim.tipe = value;
-                    },
-                    controller: _tipeCont,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Tipe animal harus diisi';
-                      }
-                      return null;
-                    },
-                  )),
+                padding: EdgeInsets.all(10),
+                child: TextFormField(
+                  decoration: const InputDecoration(
+                    labelText: 'Tipe Hewan',
+                  ),
+                  onChanged: (value) {
+                    _anim.tipe = value;
+                  },
+                  controller: _tipeCont,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Tipe animal harus diisi';
+                    }
+                    return null;
+                  },
+                )),
             DropdownButton<AnimalGender>(
               value: selectedGender,
               onChanged: (AnimalGender? newValue) {
@@ -224,7 +225,7 @@ class _EditOfferState extends State<EditOffer> {
         body: {
           'id': widget.animalID.toString(),
           'name': _anim.name,
-          'umur': _anim.umur,
+          'umur': _anim.umur.toString(),
           'image_url': _anim.image_url,
           'tipe': _anim.tipe,
           'gender': genderToString(selectedGender),
@@ -237,14 +238,10 @@ class _EditOfferState extends State<EditOffer> {
             .showSnackBar(SnackBar(content: Text('Sukses Mengedit Data')));
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => Offer()),
-        );
+          MaterialPageRoute(builder: (context) => Offer()));
+      } else {
+        throw Exception('Failed to read API');
       }
-      main();
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error')));
-      throw Exception('Failed to read API');
     }
   }
 }
