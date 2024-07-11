@@ -20,7 +20,7 @@ class _ProposeState extends State<Propose> {
   String _keterangan = "";
 
   //buat ambil id
-  String _activeUser="";
+  String _activeUser = "";
 
   String getGenderString(AnimalGender gender) {
     switch (gender) {
@@ -33,33 +33,45 @@ class _ProposeState extends State<Propose> {
     }
   }
 
+  @override
+  void initState() {
+    super.initState();
+    _getActiveUser();
+  }
+
   _getActiveUser() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _activeUser = prefs.getString("user_id") ?? "";
+      _activeUser = prefs.getString("user_email") ?? "";
     });
   }
 
   void submit() async {
-    final response = await http
-        .post(Uri.parse("https://ubaya.me/flutter/160421056/uas/submitPropose.php"), body: {
-      'keterangan': _keterangan,
-      'user_id':_getActiveUser(),
-    });
+    if (_activeUser.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User ID not found')));
+      return;
+    }
+
+    final response = await http.post(
+      Uri.parse("https://ubaya.me/flutter/160421056/uas/submitPropose.php"),
+      body: {
+        'keterangan': _keterangan,
+        'user_id': _activeUser,
+      },
+    );
+
     if (response.statusCode == 200) {
       Map json = jsonDecode(response.body);
       if (json['result'] == 'success') {
         if (!mounted) return;
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text('Sukses Menambah Data')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sukses Menambah Data')));
         Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Browse()),
+          context,
+          MaterialPageRoute(builder: (context) => Browse()),
         );
       }
     } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text('Error')));
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error')));
       throw Exception('Failed to read API');
     }
   }
@@ -139,11 +151,11 @@ class _ProposeState extends State<Propose> {
                     child: ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState != null &&
-                            !_formKey.currentState!.validate()) {
+                            _formKey.currentState!.validate()) {
+                          submit();
+                        } else {
                           ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('Harap Isian diperbaiki')));
-                        } else {
-                          submit();
                         }
                       },
                       child: Text('Submit'),
