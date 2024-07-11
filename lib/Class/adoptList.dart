@@ -1,28 +1,25 @@
+import 'package:et_uas/Class/animal.dart';
+
 class AdoptList {
   final int id;
-  final String status;
-  final String keterangan;
-  final String userEmail;
-  final int animalId;
-  final List? animals;
+  String status;
+  String keterangan;
+  String user_email;
 
   AdoptList({
     required this.id,
     required this.status,
     required this.keterangan,
-    required this.userEmail,
-    required this.animalId,
-    this.animals,
+    required this.user_email,
   });
 
   factory AdoptList.fromJson(Map<String, dynamic> json) {
+
     return AdoptList(
       id: json['id'] as int,
       status: json['status'] as String,
       keterangan: json['keterangan'] as String,
-      userEmail: json['user_email'] as String,
-      animalId: json['animal_id'] as int,
-      animals: json['animals'],
+      user_email: json['user_email'] as String,
     );
   }
 }
