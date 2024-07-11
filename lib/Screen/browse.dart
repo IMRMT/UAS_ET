@@ -36,9 +36,11 @@ class _BrowseState extends State<Browse> {
     });
   }
 
+  String _txtCari = "";
   Future<String> fetchData() async {
-    final response = await http.get(
-        Uri.parse("https://ubaya.me/flutter/160421056/uas/animal_list.php"));
+    final response = await http.post(
+        Uri.parse("https://ubaya.me/flutter/160421056/uas/animal_list.php"),
+        body: {'cari': _txtCari});
     if (response.statusCode == 200) {
       return response.body;
     } else {
@@ -147,6 +149,18 @@ class _BrowseState extends State<Browse> {
       appBar: AppBar(title: const Text('Browse')),
       body: ListView(
         children: <Widget>[
+          TextFormField(
+            decoration: const InputDecoration(
+              icon: Icon(Icons.search),
+              labelText: 'Hewan mengandung kata:',
+            ),
+            onFieldSubmitted: (value) {
+              setState(() {
+                _txtCari = value;
+                bacaData();
+              });
+            },
+          ),
           // Container(
           //   height: MediaQuery.of(context).size.height - 200,
           //   child: daftarAnimal(animals),
