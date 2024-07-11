@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:et_uas/Screen/home.dart';
 import 'package:et_uas/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -124,7 +125,10 @@ class _LoginState extends State<Register> {
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('Sukses Menambah User')));
       }
-      main();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
     } else {
       ScaffoldMessenger.of(context)
           .showSnackBar(SnackBar(content: Text('Error')));

@@ -123,7 +123,7 @@ void submit() async {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'Age: ${widget.animal.umur}',
+                    'Age (Bulan): ${widget.animal.umur}',
                     style: TextStyle(fontSize: 18),
                     textAlign: TextAlign.center,
                   ),

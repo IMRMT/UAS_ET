@@ -6,12 +6,12 @@ enum AnimalGender {
 
 class Animal {
   final int id;
-  final String name;
-  final int umur;
-  final String image_url;
-  final String tipe;
-  final AnimalGender gender;
-  final int is_adopt;
+  String name;
+  int umur;
+  String image_url;
+  String tipe;
+  AnimalGender gender;
+  int is_adopt;
 
   Animal(
       {required this.id,

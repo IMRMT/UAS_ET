@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:et_uas/Screen/home.dart';
 import 'package:et_uas/Screen/register.dart';
 import 'package:et_uas/main.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +133,10 @@ class _LoginState extends State<Login> {
         prefs.setInt("user_id", json['user_id']);
         prefs.setString("user_name", json['user_name']);
         prefs.setString("user_password", json['user_password']);
-        main();
+        Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Home()),
+      );
       } else {
         setState(() {
           error_login = "Incorrect user or password";
