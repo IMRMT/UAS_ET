@@ -37,7 +37,7 @@ Future<User?> checkUser() async {
       user_password: user_password,
     );
   }
-  return null; // Return null if any data is missing
+  return null;
 }
 
 class _OfferState extends State<Offer> {

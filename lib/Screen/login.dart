@@ -118,10 +118,6 @@ class _LoginState extends State<Login> {
   }
 
   void doLogin() async {
-    //later, we use web service here to check the user id and password
-    // final prefs = await SharedPreferences.getInstance();
-    // prefs.setString("user_id", _user_id);
-    // main();\
     final response = await http.post(
         Uri.parse("https://ubaya.me/flutter/160421056/uas/login.php"),
         body: {'user_email': _user_email, 'user_password': _user_password});

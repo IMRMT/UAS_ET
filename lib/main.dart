@@ -29,7 +29,7 @@ Future<User?> checkUser() async {
       user_password: user_password,
     );
   }
-  return null; // Return null if any data is missing
+  return null;
 }
 
 void main() {
@@ -47,7 +47,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -139,7 +138,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     Navigator.popAndPushNamed(
                       context,
                       'login',
-                    ); // This closes the drawer when the drawer item is clicked
+                    );
                   }
                 },
               ),

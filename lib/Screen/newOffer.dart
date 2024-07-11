@@ -47,7 +47,7 @@ Future<User?> checkUser() async {
       user_password: user_password,
     );
   }
-  return null; // Return null if any data is missing
+  return null;
 }
 
 class Offer extends StatefulWidget {
