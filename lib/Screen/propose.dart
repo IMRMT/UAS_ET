@@ -46,35 +46,38 @@ class _ProposeState extends State<Propose> {
     });
   }
 
-  void submit() async {
-    if (_activeUser.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User ID not found')));
-      return;
-    }
-
-    final response = await http.post(
-      Uri.parse("https://ubaya.me/flutter/160421056/uas/submitPropose.php"),
-      body: {
-        'keterangan': _keterangan,
-        'user_id': _activeUser,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      Map json = jsonDecode(response.body);
-      if (json['result'] == 'success') {
-        if (!mounted) return;
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sukses Menambah Data')));
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Browse()),
-        );
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error')));
-      throw Exception('Failed to read API');
-    }
+void submit() async {
+  if (_activeUser.isEmpty) {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('User ID not found')));
+    return;
   }
+
+  final response = await http.post(
+    Uri.parse("https://ubaya.me/flutter/160421056/uas/submitPropose.php"),
+    body: {
+      'status': 'Pending',
+      'keterangan': _keterangan,
+      'user_email': _activeUser,
+      'animal_id': widget.animal.id.toString(),
+    },
+  );
+
+  if (response.statusCode == 200) {
+    Map json = jsonDecode(response.body);
+    if (json['result'] == 'success') {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Sukses Menambah Data')));
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => Browse()),
+      );
+    }
+  } else {
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error')));
+    throw Exception('Failed to read API');
+  }
+}
+
 
   @override
   Widget build(BuildContext context) {
