@@ -133,10 +133,15 @@ class _LoginState extends State<Login> {
         prefs.setInt("user_id", json['user_id']);
         prefs.setString("user_name", json['user_name']);
         prefs.setString("user_password", json['user_password']);
+        if (json['result'] == 'success') {
+          if (!mounted) return;
+          ScaffoldMessenger.of(context)
+              .showSnackBar(SnackBar(content: Text('Sukses Login')));
+        }
         Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => Home()),
-      );
+          context,
+          MaterialPageRoute(builder: (context) => Home()),
+        );
       } else {
         setState(() {
           error_login = "Incorrect user or password";

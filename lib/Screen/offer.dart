@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:et_uas/Class/animal.dart';
 import 'package:et_uas/Class/user.dart';
+import 'package:et_uas/Screen/decision.dart';
 import 'package:et_uas/Screen/editOffer.dart';
 import 'package:et_uas/Screen/newOffer.dart';
 import 'package:flutter/material.dart';
@@ -113,6 +114,22 @@ class _OfferState extends State<Offer> {
               ButtonBar(
                 children: <Widget>[
                   TextButton(
+                    child: const Text('Decision'),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              Decision(animalID: animals2[index].id),
+                        ),
+                      );
+                    },
+                  ),
+                ],
+              ),
+              ButtonBar(
+                children: <Widget>[
+                  TextButton(
                     child: const Text('Edit'),
                     onPressed: () {
                       Navigator.push(
@@ -126,22 +143,16 @@ class _OfferState extends State<Offer> {
                   ),
                 ],
               ),
-              // ButtonBar(
-              //   children: <Widget>[
-              //     TextButton(
-              //       child: const Text('Delete'),
-              //       onPressed: () {
-              //         Navigator.pushReplacement(
-              //           context,
-              //           MaterialPageRoute(
-              //             builder: (context) =>
-              //                 delete(animals2[index].id),
-              //           ),
-              //         );
-              //       },
-              //     ),
-              //   ],
-              // ),
+              ButtonBar(
+                children: <Widget>[
+                  TextButton(
+                    child: const Text('Delete'),
+                    onPressed: () {
+                      delete(animals2[index].id);
+                    },
+                  ),
+                ],
+              ),
             ],
           ),
         );
