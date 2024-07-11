@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 
-String _user_id = '';
+int _user_id = 0;
 String _user_email = '';
 String _user_name = '';
 String _user_password = '';
@@ -86,6 +86,7 @@ class _LoginState extends State<Login> {
                   child: ElevatedButton(
                     onPressed: () {
                       doLogin();
+                      main();
                     },
                     child: Text(
                       'Login',
@@ -128,8 +129,9 @@ class _LoginState extends State<Login> {
       if (json['result'] == 'success') {
         final prefs = await SharedPreferences.getInstance();
         prefs.setString("user_email", _user_email);
-        prefs.setString("user_id", json['user_id']);
+        prefs.setInt("user_id", json['user_id']);
         prefs.setString("user_name", json['user_name']);
+        prefs.setString("user_password", json['user_password']);
         main();
       } else {
         setState(() {
