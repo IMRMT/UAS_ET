@@ -11,16 +11,18 @@ class Animal {
   String image_url;
   String tipe;
   AnimalGender gender;
-  int is_adopt;
+  int isAdopt;
 
-  Animal(
-      {required this.id,
-      required this.name,
-      required this.umur,
-      required this.image_url,
-      required this.tipe,
-      required this.gender,
-      required this.is_adopt,});
+  Animal({
+    required this.id,
+    required this.name,
+    required this.umur,
+    required this.image_url,
+    required this.tipe,
+    required this.gender,
+    required this.isAdopt,
+  });
+
   factory Animal.fromJson(Map<String, dynamic> json) {
     return Animal(
       id: json['id'] as int,
@@ -29,7 +31,7 @@ class Animal {
       image_url: json['image_url'] as String,
       tipe: json['tipe'] as String,
       gender: _parseAnimalGender(json['gender'] as String),
-      is_adopt: json['is_adopt'] as int,
+      isAdopt: json['is_adopt'] as int,
     );
   }
 
